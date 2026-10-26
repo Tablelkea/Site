@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fff5f9">
+    <title>Administration - Eléstya</title>
+    <link rel="stylesheet" href="style-dark.css">
+</head>
+
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="https://xn--elstya-cva.fr/assets/themes/elestya/img/logo.png?v1.2.13=" alt="">
+            <span>Eléstya <small>ADMIN</small></span>
+        </a>
+        <a href="commandes.html">Commandes</a>
+        <span class="panel-label">Espace staff</span>
+    </header>
+
+    <main>
+        <section class="server-hero">
+            <img class="server-hero-image" src="https://xn--elstya-cva.fr/storage/img/dragon.jpg"
+                alt="Dragon volant devant les cerisiers en fleurs d'Eléstya">
+            <div class="server-hero-overlay"></div>
+            <div class="server-hero-content">
+                <span class="hero-label">ESPACE D'ADMINISTRATION</span>
+                <h1>Bienvenue sur Eléstya</h1>
+                <p>Retrouvez les informations du serveur et consultez les profils des joueurs.</p>
+            </div>
+            <div class="hero-flower" aria-hidden="true">✿</div>
+        </section>
+
+        <section class="card search-card">
+            <div class="section-heading">
+                <div class="section-icon search-icon" aria-hidden="true">⌕</div>
+                <div>
+                    <h2>Rechercher un joueur</h2>
+                    <p>Accédez à son profil, ses statistiques et ses sanctions.</p>
+                </div>
+            </div>
+
+            <form id="search-form">
+                <div class="search-field">
+                    <label for="search-input">Pseudo Minecraft</label>
+
+                    <input id="search-input" type="text" placeholder="Entrez un pseudo..." maxlength="255"
+                        autocomplete="off" aria-autocomplete="list" aria-controls="search-suggestions"
+                        aria-expanded="false" required>
+
+                    <ul id="search-suggestions" class="search-suggestions" role="listbox" hidden></ul>
+                </div>
+                <button type="submit">Rechercher <span aria-hidden="true">→</span></button>
+            </form>
+        </section>
+
+        <section class="card online-card">
+            <div class="section-heading online-heading">
+                <div class="section-icon players-icon" aria-hidden="true">♙</div>
+                <div>
+                    <h2>Joueurs en ligne</h2>
+                    <p>Les joueurs actuellement connectés.</p>
+                </div>
+                <span id="online-count" class="badge">—</span>
+            </div>
+
+            <p id="online-empty" class="muted empty-state" hidden>
+                <span class="empty-icon" aria-hidden="true">✿</span>
+                <strong>Aucun joueur connecté</strong>
+                <span>Les joueurs connectés apparaîtront ici.</span>
+            </p>
+
+            <ul id="online-list" class="players"></ul>
+        </section>
+
+        <section class="card analytics-card" id="analytics">
+    <div class="section-heading">
+        <div class="section-icon analytics-icon" aria-hidden="true">⌁</div>
+        <div>
+            <h2>Statistiques du serveur</h2>
+            <p>Fréquentation, fidélisation et temps de jeu.</p>
+        </div>
+        <button type="button" id="analytics-refresh" class="analytics-refresh">
+            Actualiser ↻
+        </button>
+    </div>
+
+    <p id="analytics-error" class="analytics-error" role="alert" hidden></p>
+    <p id="analytics-loading" class="muted">Chargement des statistiques…</p>
+
+    <div id="analytics-content" hidden>
+        <div class="analytics-grid">
+            <article class="analytics-stat">
+                <span>Nouveaux joueurs (30 jours)</span>
+                <strong id="analytics-new-players">—</strong>
+                <small>Premières connexions</small>
+            </article>
+
+            <article class="analytics-stat">
+                <span>Taux global de retour</span>
+                <strong id="analytics-return-rate">—</strong>
+                <small id="analytics-return-detail">—</small>
+            </article>
+
+            <article class="analytics-stat">
+                <span>Temps moyen / jour · 7 jours</span>
+                <strong id="analytics-time-7">—</strong>
+                <small>Temps cumulé de tous les joueurs</small>
+            </article>
+
+            <article class="analytics-stat">
+                <span>Temps moyen / jour · 30 jours</span>
+                <strong id="analytics-time-30">—</strong>
+                <small>Temps cumulé de tous les joueurs</small>
+            </article>
+        </div>
+
+        <div class="analytics-chart-panel">
+            <div class="analytics-panel-heading">
+                <div>
+                    <h3>Nouveaux joueurs</h3>
+                    <p>Évolution quotidienne sur les 30 derniers jours</p>
+                </div>
+                <span class="analytics-chart-legend">
+                    <i></i> Premières connexions
+                </span>
+            </div>
+
+            <div class="analytics-chart-wrap">
+                <svg id="analytics-chart"
+                     viewBox="0 0 800 260"
+                     role="img"
+                     aria-label="Courbe des nouveaux joueurs par jour"
+                     preserveAspectRatio="xMidYMid meet"></svg>
+            </div>
+        </div>
+
+        <div class="analytics-retention">
+            <div class="analytics-panel-heading">
+                <div>
+                    <h3>Rétention des joueurs</h3>
+                    <p>Part des joueurs revenus le jour correspondant à leur première connexion.</p>
+                </div>
+            </div>
+
+            <div class="retention-grid">
+                <article class="retention-stat">
+                    <span>J+1</span>
+                    <strong id="retention-day-1">—</strong>
+                    <small id="retention-detail-1">—</small>
+                </article>
+
+                <article class="retention-stat">
+                    <span>J+7</span>
+                    <strong id="retention-day-7">—</strong>
+                    <small id="retention-detail-7">—</small>
+                </article>
+
+                <article class="retention-stat">
+                    <span>J+30</span>
+                    <strong id="retention-day-30">—</strong>
+                    <small id="retention-detail-30">—</small>
+                </article>
+            </div>
+        </div>
+
+        <p class="analytics-footnote">
+            Les taux de rétention excluent les joueurs dont la période
+            d'observation n'est pas terminée. Les données dépendent de
+            l'historique enregistré par le plugin.
+        </p>
+    </div>
+</section>
+
+        <footer class="site-footer">
+            <span>Eléstya</span>
+            <span>Lecture seule</span>
+        </footer>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

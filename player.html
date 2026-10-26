@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff5f9">
+  <title>Profil joueur - Eléstya</title>
+  <link rel="stylesheet" href="style-dark.css">
+</head>
+<body>
+  <header>
+  <a href="index.html" class="logo">
+    <img
+      src="https://xn--elstya-cva.fr/assets/themes/elestya/img/logo.png?v1.2.13="
+      alt=""
+    >
+    <span>Eléstya <small>ADMIN</small></span>
+  </a>
+
+  <a href="index.html" class="back-link">
+    <span aria-hidden="true">←</span> Dashboard
+  </a>
+</header>
+
+  <main>
+    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+      <a href="index.html">Dashboard</a>
+      <span aria-hidden="true">/</span>
+      <span>Profil joueur</span>
+    </nav>
+
+    <section class="page-heading">
+      <div>
+        <p class="eyebrow">ESPACE STAFF</p>
+        <h1>Profil joueur</h1>
+        <p class="page-description">Informations et historique du joueur.</p>
+      </div>
+    </section>
+
+    <p id="error" class="error" hidden></p>
+
+    <section id="profile" class="card profile-card" hidden>
+      <div class="profile-banner">
+        <img
+          src="https://xn--elstya-cva.fr/storage/img/dragon.jpg"
+          alt=""
+        >
+        <div class="profile-banner-overlay"></div>
+        <span class="profile-banner-flower" aria-hidden="true">✿</span>
+      </div>
+
+      <div class="profile-main">
+        <div class="profile-top">
+          <img id="player-head" class="player-head" alt="Tête de joueur">
+          <div class="profile-identity">
+            <p class="eyebrow">PROFIL MINECRAFT</p>
+            <h2 id="player-name"></h2>
+            <div class="profile-status">
+              <span class="profile-status-label">Statut</span>
+              <span id="player-status"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-divider"></div>
+
+        <div class="profile-details">
+          <div class="detail-item">
+            <span class="detail-label">✿ Première connexion</span>
+            <strong id="first-login">—</strong>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">↻ Dernière connexion</span>
+            <strong id="last-login">—</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sanctions-section" class="card sanctions-card" hidden>
+      <div class="section-heading sanctions-heading">
+        <div class="section-icon sanctions-icon" aria-hidden="true">⚑</div>
+        <div>
+          <h2>Sanctions</h2>
+          <p>Sanctions associées à ce joueur.</p>
+        </div>
+      </div>
+
+      <p id="no-sanctions" class="muted empty-state" hidden>
+        <span class="empty-icon" aria-hidden="true">✿</span>
+        <strong>Aucune sanction enregistrée</strong>
+        <span>Aucune sanction à afficher pour ce joueur.</span>
+      </p>
+
+      <div class="table-wrap">
+        <table id="sanctions-table" hidden>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Raison</th>
+              <th>Date</th>
+              <th>Fin</th>
+              <th>État</th>
+            </tr>
+          </thead>
+          <tbody id="sanctions-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+
+<section class="card sanctions-chart-card">
+  <div class="section-heading">
+    <div>
+      <h2>Répartition des sanctions</h2>
+      <p>Les sanctions enregistrées pour ce joueur.</p>
+    </div>
+  </div>
+
+  <div id="sanctions-chart-content" class="sanctions-chart-content">
+    <div id="sanctions-chart" class="sanctions-chart" role="img"
+         aria-label="Répartition des sanctions">
+      <div class="sanctions-chart-center">
+        <strong id="sanctions-total">0</strong>
+        <span>sanctions</span>
+      </div>
+    </div>
+
+    <ul id="sanctions-legend" class="sanctions-legend"></ul>
+  </div>
+
+  <p id="sanctions-chart-empty" class="muted" hidden>
+    Aucune sanction enregistrée pour ce joueur.
+  </p>
+</section>
+
+
+<section class="card statistics-card">
+  <h2>Statistiques du joueur</h2>
+
+  <div class="statistics-grid">
+    <div class="statistic-item">
+      <span>Entitée tuées</span>
+      <strong id="stat-coins">0</strong>
+    </div>
+
+    <div class="statistic-item">
+      <span>Mobs tués</span>
+      <strong id="stat-mobs-killed">0</strong>
+    </div>
+
+    <div class="statistic-item">
+      <span>Morts</span>
+      <strong id="stat-deaths">0</strong>
+    </div>
+
+    <div class="statistic-item">
+      <span>Temps de jeu</span>
+      <strong id="stat-playtime">0 h</strong>
+    </div>
+  </div>
+</section>
+
+
+    <footer class="site-footer">
+      <a href="index.html">← Retour au dashboard</a>
+      <span>Eléstya <span class="footer-separator">/</span> Joueurs</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

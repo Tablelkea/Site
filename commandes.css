@@ -1,0 +1,823 @@
+
+/* =========================================
+   ELÉSTYA — PAGE COMMANDES
+   Thème basé sur style-dark.css
+   ========================================= */
+
+/* ---------- Mise en page générale ---------- */
+
+.commands-page {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 42px clamp(18px, 4vw, 56px) 64px;
+    color: var(--text);
+}
+
+.commands-page h1,
+.commands-page h2,
+.commands-page h3 {
+    color: var(--text);
+}
+
+.commands-page p {
+    color: var(--text-soft);
+}
+
+.commands-page [hidden] {
+    display: none !important;
+}
+
+/* ---------- En-tête de la page ---------- */
+
+/* Empêche le header de cette page d'hériter
+   du comportement du header principal. */
+
+.commands-page > .page-heading {
+    position: static;
+    z-index: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    min-height: 0;
+    margin: 0 0 32px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.commands-page .eyebrow {
+    margin: 0 0 9px;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.commands-page .eyebrow span {
+    color: var(--muted);
+}
+
+.commands-page h1 {
+    margin: 0 0 10px;
+    font-size: clamp(30px, 4vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+}
+
+.commands-page .subtitle {
+    max-width: 620px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* ---------- Recherche ---------- */
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: min(350px, 100%);
+    min-width: 230px;
+    padding: 0 14px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--muted);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-box:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.search-box > span {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.search-box input {
+    width: 100%;
+    min-width: 0;
+    height: 46px;
+    padding: 0;
+    color: var(--text);
+    background: transparent;
+    border: 0;
+    outline: 0;
+    box-shadow: none;
+    font: inherit;
+}
+
+.search-box input:focus {
+    border: 0;
+    box-shadow: none;
+}
+
+.search-box input::placeholder {
+    color: var(--muted);
+}
+
+/* ---------- Organisation principale ---------- */
+
+.commands-layout {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: start;
+    gap: 22px;
+}
+
+.plugin-sidebar,
+.command-content {
+    min-width: 0;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius, 16px);
+}
+
+/* ---------- Barre latérale ---------- */
+
+.plugin-sidebar {
+    position: sticky;
+    top: 94px;
+    display: flex;
+    flex-direction: column;
+    min-height: 470px;
+    padding: 16px;
+}
+
+.sidebar-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 5px 7px 15px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.count,
+.result-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px 9px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-soft);
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+/* Liste des plugins */
+
+.plugin-list {
+    display: grid;
+    gap: 5px;
+}
+
+.plugin-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 46px;
+    padding: 8px 10px;
+    color: var(--text-soft);
+    text-align: left;
+    font: inherit;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition:
+        color 0.18s,
+        background 0.18s,
+        border-color 0.18s;
+}
+
+.plugin-filter:hover {
+    color: var(--text);
+    background: var(--card);
+    border-color: var(--border);
+}
+
+.plugin-filter.active {
+    color: var(--text);
+    background: var(--accent-soft);
+    border-color: rgba(217, 139, 189, 0.28);
+}
+
+.plugin-mark {
+    display: grid;
+    place-items: center;
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 800;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+}
+
+.plugin-filter.active .plugin-mark {
+    background: rgba(217, 139, 189, 0.12);
+    border-color: rgba(217, 139, 189, 0.3);
+}
+
+.plugin-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.plugin-command-count {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* ---------- Boutons ---------- */
+
+.commands-page .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 10px 13px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    transition:
+        color 0.18s,
+        background 0.18s,
+        border-color 0.18s,
+        transform 0.18s;
+}
+
+.commands-page .button:active {
+    transform: translateY(1px);
+}
+
+.commands-page .button:focus-visible,
+.plugin-filter:focus-visible,
+.command-delete:focus-visible,
+.modal-close:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+.commands-page .button-primary {
+    color: #21121d;
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.commands-page .button-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+.commands-page .button-secondary {
+    color: var(--text-soft);
+    background: var(--card);
+    border-color: var(--border);
+}
+
+.commands-page .button-secondary:hover {
+    color: var(--text);
+    background: var(--card-hover);
+    border-color: #484052;
+}
+
+.sidebar-actions {
+    display: grid;
+    gap: 9px;
+    margin-top: auto;
+    padding-top: 22px;
+}
+
+.sidebar-actions .button {
+    width: 100%;
+}
+
+/* ---------- Zone des commandes ---------- */
+
+.command-content {
+    min-height: 470px;
+    padding: clamp(17px, 3vw, 28px);
+}
+
+.content-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--border);
+}
+
+.content-heading > div {
+    min-width: 0;
+}
+
+.content-heading .eyebrow {
+    margin-bottom: 6px;
+}
+
+.content-heading h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 750;
+    line-height: 1.3;
+    letter-spacing: -0.03em;
+}
+
+.result-count {
+    flex-shrink: 0;
+}
+
+/* ---------- Cartes de commandes ---------- */
+
+.commands-list {
+    display: grid;
+    gap: 12px;
+    padding-top: 18px;
+}
+
+.command-card {
+    min-width: 0;
+    padding: 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    transition:
+        border-color 0.18s,
+        background 0.18s,
+        transform 0.18s;
+}
+
+.command-card:hover {
+    background: var(--card-hover);
+    border-color: #484052;
+    transform: translateY(-1px);
+}
+
+.command-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.command-card-top > div {
+    min-width: 0;
+}
+
+.command-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    margin-bottom: 8px;
+}
+
+.command-title h3 {
+    min-width: 0;
+    margin: 0;
+    color: var(--text);
+    font-size: 17px;
+    font-weight: 750;
+    overflow-wrap: anywhere;
+}
+
+.command-symbol {
+    display: grid;
+    place-items: center;
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    color: var(--accent);
+    font-weight: 900;
+    background: var(--accent-soft);
+    border: 1px solid rgba(217, 139, 189, 0.15);
+    border-radius: 9px;
+}
+
+.plugin-tag {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    padding: 4px 9px;
+    color: var(--text-soft);
+    font-size: 11px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+}
+
+.command-usage {
+    display: inline-block;
+    max-width: 100%;
+    margin: 2px 0 12px;
+    padding: 7px 10px;
+    color: var(--accent);
+    font: 13px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.command-description {
+    margin: 0;
+    color: var(--text-soft);
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Bouton de suppression */
+
+.command-delete {
+    display: grid;
+    place-items: center;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    color: var(--muted);
+    font-size: 18px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    cursor: pointer;
+    transition:
+        color 0.18s,
+        background 0.18s,
+        border-color 0.18s;
+}
+
+.command-delete:hover {
+    color: var(--danger);
+    background: rgba(255, 133, 142, 0.08);
+    border-color: rgba(255, 133, 142, 0.25);
+}
+
+/* ---------- État vide ---------- */
+
+.commands-page .empty-state {
+    padding: 70px 18px;
+    text-align: center;
+}
+
+.empty-icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 16px;
+    color: var(--accent);
+    font-size: 24px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+.commands-page .empty-state h3 {
+    margin-bottom: 7px;
+    font-size: 18px;
+}
+
+.commands-page .empty-state p {
+    margin-bottom: 20px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+/* ---------- Fenêtres modales ---------- */
+
+.modal-backdrop {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    overflow-y: auto;
+    background: rgba(5, 5, 9, 0.76);
+    backdrop-filter: blur(8px);
+}
+
+.modal {
+    position: relative;
+    width: min(540px, 100%);
+    max-height: calc(100vh - 40px);
+    padding: 30px;
+    overflow-y: auto;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 19px;
+    box-shadow: var(--shadow, 0 18px 55px rgba(0, 0, 0, 0.4));
+    animation: modal-in 0.18s ease-out;
+}
+
+.modal-small {
+    width: min(450px, 100%);
+}
+
+@keyframes modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 17px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    color: var(--text-soft);
+    font-size: 23px;
+    line-height: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    cursor: pointer;
+    transition:
+        color 0.18s,
+        background 0.18s;
+}
+
+.modal-close:hover {
+    color: var(--text);
+    background: var(--card-hover);
+}
+
+.modal h2 {
+    margin: 0 36px 8px 0;
+    color: var(--text);
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+}
+
+.modal-description {
+    margin-bottom: 24px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Formulaires des modales */
+
+.modal form {
+    display: grid;
+    align-items: stretch;
+    gap: 17px;
+}
+
+.modal form label {
+    display: grid;
+    gap: 7px;
+    color: var(--text-soft);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 13px;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    outline: none;
+    transition:
+        border-color 0.18s,
+        box-shadow 0.18s;
+}
+
+.modal input,
+.modal select {
+    min-height: 45px;
+}
+
+.modal textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal input::placeholder,
+.modal textarea::placeholder {
+    color: var(--muted);
+}
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 5px;
+}
+
+.form-error {
+    margin: 0;
+    padding: 10px 12px;
+    color: var(--danger);
+    font-size: 13px;
+    background: rgba(255, 133, 142, 0.08);
+    border: 1px solid rgba(255, 133, 142, 0.2);
+    border-radius: 9px;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+/* ---------- Responsive : tablette ---------- */
+
+@media (max-width: 900px) {
+    .commands-page {
+        padding-top: 30px;
+    }
+
+    .commands-layout {
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .plugin-sidebar {
+        padding: 12px;
+    }
+
+    .command-content {
+        padding: 18px;
+    }
+
+    .commands-page > .page-heading {
+        gap: 20px;
+    }
+
+    .search-box {
+        width: 280px;
+        min-width: 200px;
+    }
+}
+
+/* ---------- Responsive : mobile ---------- */
+
+@media (max-width: 700px) {
+    .commands-page {
+        padding: 26px 16px 42px;
+    }
+
+    .commands-page > .page-heading {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+
+    .search-box {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .commands-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .plugin-sidebar {
+        position: static;
+        min-height: 0;
+        padding: 14px;
+    }
+
+    .plugin-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .plugin-filter {
+        padding: 8px;
+    }
+
+    .sidebar-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding-top: 16px;
+    }
+
+    .command-content {
+        min-height: 300px;
+        padding: 18px;
+    }
+
+    .content-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .content-heading h2 {
+        font-size: 21px;
+    }
+
+    .commands-page .empty-state {
+        padding: 45px 12px;
+    }
+
+    .modal {
+        padding: 25px 19px;
+    }
+}
+
+/* ---------- Responsive : petits écrans ---------- */
+
+@media (max-width: 430px) {
+    .plugin-list,
+    .sidebar-actions {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .command-card {
+        padding: 14px;
+    }
+
+    .command-card-top {
+        gap: 8px;
+    }
+
+    .command-title {
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .plugin-tag {
+        white-space: normal;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .modal-actions .button {
+        width: 100%;
+    }
+}
+
+/* ---------- Accessibilité ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .commands-page *,
+    .modal-backdrop * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
