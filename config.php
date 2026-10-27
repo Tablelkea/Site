@@ -3,9 +3,9 @@ function db(): PDO {
     static $pdo = null;
     if ($pdo === null) {
         $pdo = new PDO(
-            "mysql:host=sql2.minestrator.com;port=3306;dbname=minesr_AgDV2vCD;charset=utf8mb4",
-            "minesr_AgDV2vCD",
-            "URTaGYCtJ8l7uQpx",
+            "mysql:host=sql3.minestrator.com;port=3306;dbname=minesr_TjgU4eUV;charset=utf8mb4",
+            "minesr_TjgU4eUV",
+            "PrQNVtYa13IMoSMa",
             [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

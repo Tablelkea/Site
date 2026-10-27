@@ -1,6 +1,10 @@
 
 const $ = (id) => document.getElementById(id);
 
+function headUrl(player, size = 64) {
+    const id = player.uuid || player.name;
+    return "https://mc-heads.net/avatar/" + encodeURIComponent(id) + "/" + size;
+}
 async function getJSON(url) {
     const res = await fetch(url);
     const data = await res.json();
@@ -93,17 +97,7 @@ async function initHome() {
                         head.width = 36;
                         head.height = 36;
                         head.loading = "lazy";
-
-                        if (player.uuid) {
-                            head.src =
-                                "https://crafatar.com/avatars/" +
-                                encodeURIComponent(player.uuid) +
-                                "?size=36&overlay";
-                        } else {
-                            head.src =
-                                "https://api.mcskin.me/face/" +
-                                encodeURIComponent(player.name);
-                        }
+                        head.src = headUrl(player, 36)
 
                         // Pseudo et statut.
                         const info = document.createElement("span");
@@ -260,20 +254,11 @@ async function initPlayer() {
             "api/player.php?name=" + encodeURIComponent(name)
         );
 
-        const stats = p.statistics;
-
-        $("stat-coins").textContent = stats.coins;
-        $("stat-mobs-killed").textContent = stats.mobs_killed;
-        $("stat-deaths").textContent = stats.deaths;
-        $("stat-playtime").textContent =
-            Math.floor(Number(stats.playtime) / 3600000) + " h";
-
         renderSanctionsChart(p.sanctions);
 
         document.title = p.name + " - Elestya";
         $("player-name").textContent = p.name;
-        $("player-head").src =
-            "https://api.mcskin.me/face/" + encodeURIComponent(p.name);
+        $("player-head").src = headUrl(p, 128);
         $("player-status").textContent =
             Number(p.online) ? "En ligne" : "Hors ligne";
         $("first-login").textContent = formatDate(p.first_login);
@@ -281,6 +266,7 @@ async function initPlayer() {
         $("profile").hidden = false;
 
         $("sanctions-section").hidden = false;
+        $("player-economy").textContent = p.player_economy;
 
         if (p.sanctions.length === 0) {
             $("no-sanctions").hidden = false;
@@ -705,3 +691,56 @@ if ($("analytics-content")) {
 
     void loadDashboardStats();
 }
+
+
+/* ---------- Gestion du thème ---------- */
+
+function initTheme() {
+    const button = $("theme-toggle");
+    const body = document.body;
+
+    function applyTheme(theme) {
+        const isLight = theme === "light";
+
+        body.classList.toggle("light-mode", isLight);
+
+        if (button) {
+            button.textContent = isLight
+                ? "🌙 Mode sombre"
+                : "☀️ Mode clair";
+
+            button.setAttribute(
+                "aria-label",
+                isLight
+                    ? "Activer le mode sombre"
+                    : "Activer le mode clair"
+            );
+        }
+    }
+
+    let savedTheme;
+
+    try {
+        savedTheme = localStorage.getItem("elestya-theme");
+    } catch (error) {
+        console.warn("Impossible de lire le thème enregistré.", error);
+    }
+
+    applyTheme(savedTheme === "light" ? "light" : "dark");
+
+    button?.addEventListener("click", () => {
+        const nextTheme = body.classList.contains("light-mode")
+            ? "dark"
+            : "light";
+
+        applyTheme(nextTheme);
+
+        try {
+            localStorage.setItem("elestya-theme", nextTheme);
+        } catch (error) {
+            console.warn("Impossible d'enregistrer le thème.", error);
+        }
+    });
+}
+
+initTheme();

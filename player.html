@@ -4,9 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fff5f9">
   <title>Profil joueur - Eléstya</title>
-  <link rel="stylesheet" href="style-dark.css">
+        <link rel="stylesheet" href="style-light.css">
 </head>
 <body>
   <header>
@@ -135,33 +134,20 @@
   </p>
 </section>
 
-
-<section class="card statistics-card">
-  <h2>Statistiques du joueur</h2>
-
-  <div class="statistics-grid">
-    <div class="statistic-item">
-      <span>Entitée tuées</span>
-      <strong id="stat-coins">0</strong>
-    </div>
-
-    <div class="statistic-item">
-      <span>Mobs tués</span>
-      <strong id="stat-mobs-killed">0</strong>
-    </div>
-
-    <div class="statistic-item">
-      <span>Morts</span>
-      <strong id="stat-deaths">0</strong>
-    </div>
-
-    <div class="statistic-item">
-      <span>Temps de jeu</span>
-      <strong id="stat-playtime">0 h</strong>
+<section id="bank-section" class="card bank-card">
+  <div class="section-heading">
+    <div class="section-icon bank-icon" aria-hidden="true">€</div>
+    <div>
+      <h2>Banque</h2>
+      <p>Solde actuel du compte du joueur.</p>
     </div>
   </div>
-</section>
 
+  <div class="bank-balance">
+    <span class="detail-label">Solde disponible</span>
+    <strong id="player-bank-balance">—</strong>
+  </div>
+</section>
 
     <footer class="site-footer">
       <a href="index.html">← Retour au dashboard</a>

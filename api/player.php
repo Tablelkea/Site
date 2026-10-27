@@ -35,21 +35,14 @@ try {
     $st->execute([$player['uuid']]);
     $player['sanctions'] = $st->fetchAll(PDO::FETCH_ASSOC);
 
-    // Récupération des statistiques
+    // Récupération de la banque
     $st = db()->prepare(
-        "SELECT coins, mobs_killed, deaths, playtime
-         FROM player_statistics
-         WHERE uuid = ?"
+        "SELECT money 
+        FROM players_economy"
+        WHERE uuid = ?
     );
     $st->execute([$player['uuid']]);
-    $stats = $st->fetch(PDO::FETCH_ASSOC);
-
-    $player['statistics'] = $stats ?: [
-        'coins' => 0,
-        'mobs_killed' => 0,
-        'deaths' => 0,
-        'playtime' => 0
-    ];
+    $player['player_economy'] = $st->fetchAll(PDO::FETCH_ASSOC);
 
     // Ne pas exposer l'UUID
     unset($player['uuid']);
