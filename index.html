@@ -5,8 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Administration - Eléstya</title>
-      <link rel="stylesheet" href="style-light.css">
-
+<link id="theme-stylesheet" rel="stylesheet" href="style-light.css">
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem("elestya-theme") === "dark") {
+        document.getElementById("theme-stylesheet").setAttribute("href", "style-dark.css");
+      }
+    } catch (e) {}
+  })();
+</script>
+      <link rel="shortcut icon" href="https://xn--elstya-cva.fr/storage/img/favicon.png">
 </head>
 
 <body>
@@ -15,7 +24,15 @@
             <img src="https://xn--elstya-cva.fr/assets/themes/elestya/img/logo.png?v1.2.13=" alt="">
             <span>Eléstya <small>ADMIN</small></span>
         </a>
-        <span class="panel-label">Espace staff</span>
+        <div class="header-actions">
+    <span class="panel-label">Espace staff</span>
+    <button type="button" id="theme-toggle" class="theme-toggle" role="switch"
+        aria-checked="false" aria-label="Activer le mode sombre" title="Changer de thème">
+    <span class="theme-thumb" aria-hidden="true"></span>
+    <span class="theme-icon" aria-hidden="true">☼&#xFE0E;</span>
+    <span class="theme-icon" aria-hidden="true">☾&#xFE0E;</span>
+</button>
+</div>
     </header>
 
     <main>

@@ -1,4 +1,3 @@
-
 const $ = (id) => document.getElementById(id);
 
 function headUrl(player, size = 64) {
@@ -24,6 +23,13 @@ function formatDate(value) {
         : new Date(String(value).replace(" ", "T"));
 
     return isNaN(d) ? "—" : d.toLocaleString("fr-FR");
+}
+
+function formatMoney(value) {
+    return Number(value || 0).toLocaleString("fr-FR", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }) + " €";
 }
 
 function sanctionState(s) {
@@ -97,7 +103,7 @@ async function initHome() {
                         head.width = 36;
                         head.height = 36;
                         head.loading = "lazy";
-                        head.src = headUrl(player, 36)
+                        head.src = headUrl(player, 36);
 
                         // Pseudo et statut.
                         const info = document.createElement("span");
@@ -239,6 +245,87 @@ async function initHome() {
 }
 
 
+/* ---------- Historique bancaire ---------- */
+
+function renderEconomyHistory(history) {
+    const table = $("economy-history-table");
+    const body = $("economy-history-body");
+    const empty = $("economy-history-empty");
+
+    if (!table || !body || !empty) return;
+
+    body.replaceChildren();
+
+    const rows = history ?? [];
+
+    if (rows.length === 0) {
+        table.hidden = true;
+        empty.hidden = false;
+        return;
+    }
+
+    empty.hidden = true;
+    table.hidden = false;
+
+    for (const entry of rows) {
+        const isDeposit = entry.type === "deposit";
+        const tr = document.createElement("tr");
+
+        const date = document.createElement("td");
+        date.textContent = formatDate(entry.timestamp);
+
+        const type = document.createElement("td");
+        type.textContent = isDeposit ? "Dépôt" : "Retrait";
+
+        const amount = document.createElement("td");
+        amount.className = isDeposit ? "money-positive" : "money-negative";
+        amount.textContent =
+            (isDeposit ? "+" : "−") + formatMoney(entry.amount);
+
+        tr.append(date, type, amount);
+        body.appendChild(tr);
+    }
+}
+
+
+/* ---------- Métiers ---------- */
+
+const JOB_LABELS = {
+    MINEUR: "Mineur",
+    BUCHERON: "Bûcheron",
+    PECHEUR: "Pêcheur",
+    FERMIER: "Fermier",
+    CONSTRUCTEUR: "Constructeur",
+    EXPLORATEUR: "Explorateur"
+};
+
+function renderJobs(jobs) {
+    const body = $("jobs-body");
+
+    if (!body) return;
+
+    body.replaceChildren();
+
+    for (const job of jobs ?? []) {
+        const tr = document.createElement("tr");
+
+        const cells = [
+            JOB_LABELS[String(job.metier).toUpperCase()] ?? job.metier,
+            job.level,
+            job.prestige
+        ];
+
+        for (const value of cells) {
+            const td = document.createElement("td");
+            td.textContent = value;
+            tr.appendChild(td);
+        }
+
+        body.appendChild(tr);
+    }
+}
+
+
 /* ---------- Page profil ---------- */
 
 async function initPlayer() {
@@ -265,8 +352,17 @@ async function initPlayer() {
         $("last-login").textContent = formatDate(p.last_login);
         $("profile").hidden = false;
 
+        // Solde bancaire (affiché même sans sanction).
+        $("player-bank-balance").textContent =
+            formatMoney(p.player_economy?.money);
+
+        // Historique des transactions (avant le return des sanctions vides).
+        renderEconomyHistory(p.economy_history);
+
+        // Métiers (avant le return des sanctions vides).
+        renderJobs(p.jobs);
+
         $("sanctions-section").hidden = false;
-        $("player-economy").textContent = p.player_economy;
 
         if (p.sanctions.length === 0) {
             $("no-sanctions").hidden = false;
@@ -296,6 +392,16 @@ async function initPlayer() {
 
             $("sanctions-body").appendChild(tr);
         }
+
+        try {
+    const rank = await getJSON(
+        "api/rank.php?name=" + encodeURIComponent(name)
+    );
+
+    $("player-rank").textContent = rank.rank;
+} catch (error) {
+    $("player-rank").textContent = "Aucun grade";
+}
     } catch (e) {
         showError(e.message);
     }
@@ -697,26 +803,11 @@ if ($("analytics-content")) {
 
 function initTheme() {
     const button = $("theme-toggle");
-    const body = document.body;
 
-    function applyTheme(theme) {
-        const isLight = theme === "light";
-
-        body.classList.toggle("light-mode", isLight);
-
-        if (button) {
-            button.textContent = isLight
-                ? "🌙 Mode sombre"
-                : "☀️ Mode clair";
-
-            button.setAttribute(
-                "aria-label",
-                isLight
-                    ? "Activer le mode sombre"
-                    : "Activer le mode clair"
-            );
-        }
-    }
+    const files = {
+        light: "style-light.css",
+        dark: "style-dark.css"
+    };
 
     let savedTheme;
 
@@ -726,20 +817,84 @@ function initTheme() {
         console.warn("Impossible de lire le thème enregistré.", error);
     }
 
-    applyTheme(savedTheme === "light" ? "light" : "dark");
+    let currentTheme = savedTheme === "dark" ? "dark" : "light";
+    let busy = false;
 
-    button?.addEventListener("click", () => {
-        const nextTheme = body.classList.contains("light-mode")
-            ? "dark"
-            : "light";
+    function updateButton(theme) {
+        if (!button) return;
 
-        applyTheme(nextTheme);
+        const isDark = theme === "dark";
+        const label = isDark ? "Activer le mode clair" : "Activer le mode sombre";
+
+        button.setAttribute("aria-checked", String(isDark));
+        button.setAttribute("aria-label", label);
+        button.title = label;
+    }
+
+    // Charge la nouvelle feuille, puis retire l'ancienne (pas de flash).
+    function swapStylesheet(theme) {
+        return new Promise(resolve => {
+            const old = $("theme-stylesheet");
+
+            if (!old || old.getAttribute("href") === files[theme]) {
+                resolve();
+                return;
+            }
+
+            const next = document.createElement("link");
+            next.rel = "stylesheet";
+            next.href = files[theme];
+
+            const done = () => {
+                old.remove();
+                next.id = "theme-stylesheet";
+                resolve();
+            };
+
+            next.addEventListener("load", done, { once: true });
+            next.addEventListener("error", () => {
+                next.remove();
+                resolve();
+            }, { once: true });
+
+            old.after(next);
+        });
+    }
+
+    // État initial, sans animation.
+    if (button) {
+        button.classList.add("no-transition");
+        updateButton(currentTheme);
+        void button.offsetWidth;
+        button.classList.remove("no-transition");
+    }
+
+    swapStylesheet(currentTheme);
+
+    button?.addEventListener("click", async () => {
+        if (busy) return;
+        busy = true;
+
+        currentTheme = currentTheme === "light" ? "dark" : "light";
 
         try {
-            localStorage.setItem("elestya-theme", nextTheme);
+            localStorage.setItem("elestya-theme", currentTheme);
         } catch (error) {
             console.warn("Impossible d'enregistrer le thème.", error);
         }
+
+        const root = document.documentElement;
+        const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!reduceMotion) root.classList.add("theme-transition");
+
+        updateButton(currentTheme);
+        await swapStylesheet(currentTheme);
+
+        setTimeout(() => {
+            root.classList.remove("theme-transition");
+            busy = false;
+        }, 400);
     });
 }
 
